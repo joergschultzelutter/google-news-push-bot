@@ -21,6 +21,8 @@
 from gnews import GNews
 from pprint import pformat
 import logging
+import yaml
+import apprise
 
 # Set up the global logger variable
 logging.basicConfig(
@@ -31,3 +33,9 @@ logger = logging.getLogger(__name__)
 google_news = GNews(language='de', country='DE', period='7d', max_results=10, exclude_websites=['yahoo.com', 'cnn.com'])
 my_news = google_news.get_news(key="Ukraine")
 logger.info(pformat(my_news))
+
+with open("blah.yaml", "r") as stream:
+    try:
+        print(yaml.safe_load(stream))
+    except yaml.YAMLError as exc:
+        print(exc)
