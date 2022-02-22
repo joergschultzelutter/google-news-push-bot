@@ -1,0 +1,10 @@
+topic 1:
+  language:
+    - 'de'
+    - 'en'
+  country: 'DE'
+  period: '7d'
+  max_results: 10
+  exclude_websites:
+    - 'yahoo.com'
+    - 'cnn.com'
