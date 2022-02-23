@@ -1,10 +1,19 @@
-topic 1:
+Suchbegriff_1:
+  search_term: Ukraine-Krise
   language:
     - de
     - en
-  country: DE
+  country:
+    - DE
+    - US 
   period: 7d
   max_results: 10
   exclude_websites:
     - yahoo.com
     - cnn.com
+Suchbegriff_2:
+  search_term: Direktversicherung
+  language: de
+  country: DE
+  period: 7d
+  max_results: 10
