@@ -1,7 +1,8 @@
-#!/opt/local/bin/python3
 #
 # Google News Push Bot
 # Author: Joerg Schultze-Lutter, 2022
+#
+# Function: Various utility functionsc
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,12 +19,9 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from pprint import pformat
 import logging
 import yaml
-import apprise
-from googlenews import get_google_news
-from utils import get_yaml_file
+import os.path
 
 # Set up the global logger variable
 logging.basicConfig(
@@ -31,10 +29,26 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-a = get_google_news(
-    search_term="Ukraine", language="de", country="at", proxy="www.microsoft.de"
-)
-logger.info(a)
 
-a = get_yaml_file("gnpush.yaml")
-logger.info(a)
+def get_yaml_file(filename: str = "gnpush.yaml"):
+    """
+    Read the Enpass export file and converts its content to a dictionary
+    Parameters
+    ==========
+    filename : 'str'
+        File name of the YAML file that we are going to read
+    Returns
+    =======
+    Content from YAML file
+    """
+    content = None
+    if os.path.isfile(filename):
+        with open(filename, "r") as stream:
+            try:
+                content = yaml.safe_load(stream)
+            except yaml.YAMLError as exc:
+                logger.debug(msg=exc)
+                raise ValueError("Invalid YAML file")
+        return content
+    else:
+        raise ValueError(f"YAML configuration file not found")
