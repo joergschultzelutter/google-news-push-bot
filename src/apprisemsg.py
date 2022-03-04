@@ -1,7 +1,8 @@
-#!/opt/local/bin/python3
 #
 # Google News Push Bot
 # Author: Joerg Schultze-Lutter, 2022
+#
+# Function: Apprise Communication Module
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,19 +19,10 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 
-from pprint import pformat
-import logging
-import yaml
 import apprise
-from googlenews import get_google_news
-from utils import get_yaml_file
+import logging
 
-# Set up the global logger variable
 logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s %(module)s -%(levelname)s- %(message)s"
+    level=logging.DEBUG, format="%(asctime)s %(module)s -%(levelname)s- %(message)s"
 )
 logger = logging.getLogger(__name__)
-
-
-a = get_yaml_file("gnpush.yaml")
-logger.info(a)
