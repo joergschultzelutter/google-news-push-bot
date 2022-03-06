@@ -52,3 +52,6 @@ def get_yaml_file(filename: str = "gnpush.yaml"):
         return content
     else:
         raise ValueError(f"YAML configuration file not found")
+
+if __name__ == "__main__":
+    pass
