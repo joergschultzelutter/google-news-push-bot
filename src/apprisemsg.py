@@ -27,5 +27,19 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+def send_apprise_message(title: str, body: str, apprise_config_file: str):
+
+    _apprise_instance = apprise.Apprise()
+    _apprise_config = apprise.AppriseConfig()
+    _apprise_config.add(apprise_config_file)
+
+    _apprise_instance.clear()
+    _apprise_instance.add(_apprise_config)
+
+    result = _apprise_instance.notify(title=title, body=body)
+    return result
+
+
 if __name__ == "__main__":
     pass
