@@ -23,7 +23,7 @@ import logging
 import yaml
 import apprise
 from googlenews import get_google_news
-from utils import get_yaml_file
+from utils import get_yaml_file, get_command_line_params
 
 # Set up the global logger variable
 logging.basicConfig(
@@ -31,6 +31,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+if __name__ == "__main__":
+    (
+        gnpush_topics,
+        gnpush_messengers,
+        gnpush_run_interval,
+        gnpush_generate_test_message,
+        gnpush_time_to_live,
+    ) = get_command_line_params()
 
-a = get_yaml_file("gnpush.yaml")
-logger.info(a)
+    a = get_yaml_file("gnpush_topics.yml")
+    logger.info(a)
