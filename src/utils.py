@@ -88,6 +88,13 @@ def ttl_check(interval_value):
     return interval_value
 
 
+def age_check(interval_value):
+    interval_value = int(interval_value)
+    if interval_value < 1:
+        raise argparse.ArgumentTypeError("Minimum age is 1 (days)")
+    return interval_value
+
+
 def get_command_line_params():
     parser = argparse.ArgumentParser()
 
@@ -111,6 +118,14 @@ def get_command_line_params():
         default=24,
         type=run_interval_check,
         help="Run interval in hours; default = 24 hrs, minimal value = 1 hours",
+    )
+
+    parser.add_argument(
+        "--age",
+        dest="age",
+        default=7,
+        type=age_check,
+        help="age in days; default = 7 days, minimal value = 1 day",
     )
 
     parser.add_argument(

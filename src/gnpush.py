@@ -22,8 +22,11 @@ from pprint import pformat
 import logging
 import yaml
 import apprise
+import signal
 from googlenews import get_google_news
-from utils import get_yaml_file, get_command_line_params
+from utils import get_yaml_file, get_command_line_params, signal_term_handler
+from expiringdict import ExpiringDict
+from pprint import pformat
 
 # Set up the global logger variable
 logging.basicConfig(
@@ -32,6 +35,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
+
+    logger.info(msg="Startup ...")
+
+    # Get command line parms
     (
         gnpush_topics,
         gnpush_messengers,
@@ -40,5 +47,25 @@ if __name__ == "__main__":
         gnpush_time_to_live,
     ) = get_command_line_params()
 
-    a = get_yaml_file("gnpush_topics.yml")
-    logger.info(a)
+    # Get the topics from our YAML file
+    mytopics = get_yaml_file(gnpush_topics)
+    logger.info(msg=pformat(mytopics))
+
+    # Register the SIGTERM handler; this will allow a safe shutdown of the program
+    logger.info(msg="Registering SIGTERM handler for safe shutdown...")
+    signal.signal(signal.SIGTERM, signal_term_handler)
+
+    # Set up the ExpiringDict for our entries
+    mowas_message_cache = ExpiringDict(
+        max_len=1000, max_age_seconds=gnpush_time_to_live * 86400
+    )
+
+    while True:
+        try:
+            logger.debug(msg=f"Processing your topics data ...")
+
+        except (KeyboardInterrupt, SystemExit):
+            logger.info(
+                msg="Received KeyboardInterrupt or SystemExit in progress; shutting down ..."
+            )
+            break
