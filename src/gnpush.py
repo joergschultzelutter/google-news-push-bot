@@ -27,6 +27,7 @@ from googlenews import get_google_news
 from utils import get_yaml_file, get_command_line_params, signal_term_handler
 from expiringdict import ExpiringDict
 from pprint import pformat
+import time
 
 # Set up the global logger variable
 logging.basicConfig(
@@ -63,6 +64,20 @@ if __name__ == "__main__":
     while True:
         try:
             logger.debug(msg=f"Processing your topics data ...")
+
+            for topic in mytopics:
+                # fmt: off
+                search_term = mytopics[topic]["search_term"] if "search_term" in mytopics[topic] else None
+                exclude_websites = mytopics[topic]["exclude_websites"] if "exclude_websites" in mytopics[topic] else None
+                language = mytopics[topic]["language"] if "language" in mytopics[topic] else None
+                max_results = mytopics[topic]["max_results"] if "max_results" in mytopics[topic] else None
+                period = mytopics[topic]["period"] if "period" in mytopics[topic] else None
+                proxy = mytopics[topic]["proxy"] if "proxy" in mytopics[topic] else None
+                # fmt: on
+
+                logger.info(mytopics[topic]["search_term"])
+
+            time.sleep(60)
 
         except (KeyboardInterrupt, SystemExit):
             logger.info(
