@@ -69,13 +69,26 @@ if __name__ == "__main__":
                 # fmt: off
                 search_term = mytopics[topic]["search_term"] if "search_term" in mytopics[topic] else None
                 exclude_websites = mytopics[topic]["exclude_websites"] if "exclude_websites" in mytopics[topic] else None
+                country = mytopics[topic]["country"] if "country" in mytopics[topic] else None
                 language = mytopics[topic]["language"] if "language" in mytopics[topic] else None
                 max_results = mytopics[topic]["max_results"] if "max_results" in mytopics[topic] else None
                 period = mytopics[topic]["period"] if "period" in mytopics[topic] else None
                 proxy = mytopics[topic]["proxy"] if "proxy" in mytopics[topic] else None
                 # fmt: on
 
-                logger.info(mytopics[topic]["search_term"])
+                logger.debug(
+                    msg=f"Running Google News search on search term '{search_term}'"
+                )
+                search_results = get_google_news(
+                    search_term=search_term,
+                    language=language,
+                    country=country,
+                    period=period,
+                    max_results=max_results,
+                    exclude_websites=exclude_websites,
+                    proxy=proxy,
+                )
+                logger.info(search_results)
 
             time.sleep(60)
 
