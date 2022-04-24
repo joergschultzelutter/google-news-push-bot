@@ -2,7 +2,7 @@
 # Google News Push Bot
 # Author: Joerg Schultze-Lutter, 2022
 #
-# Function: Various utility functionsc
+# Function: Various utility functions
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
