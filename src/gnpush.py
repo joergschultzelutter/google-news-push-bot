@@ -33,6 +33,7 @@ from utils import (
 from expiringdict import ExpiringDict
 from pprint import pformat
 import time
+from apprisemsg import send_apprise_message
 
 # Set up the global logger variable
 logging.basicConfig(
@@ -40,8 +41,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-if __name__ == "__main__":
 
+def gnpush_main():
     logger.info(msg="Startup ...")
 
     # Get command line parms
@@ -117,9 +118,27 @@ if __name__ == "__main__":
                                 msg=f"Successfully added {_url} to expiring cache"
                             )
             # did we find anything that we need to send?
-            if len(urls_to_send) > 0:
-                logger.info("Will send something")
+            _count = len(urls_to_send)
+            if _count > 0:
+                logger.debug(msg=f"Found {_count} new messages in total")
+                # Format the message body:
+                # urls with trailing \n except for the last item
+                body = f"I found {_count} new messages for you:\n\n"
+                body = body + ("\n".join(urls_to_send[:]))
 
+                # Send the message via Apprise
+                _result = send_apprise_message(
+                    title="gnpush Notification",
+                    body=body,
+                    apprise_config_file=gnpush_messengers,
+                )
+
+                # log message status
+                _msg = "Successfully sent" if _result else "Failed to send"
+                _msg = _msg + f" {_count} new messages via Apprise"
+                logger.info(msg=_msg)
+
+            # enter sleep mode
             logger.info(msg=f"Sleeping for {gnpush_run_interval} hours")
             time.sleep(3600 * gnpush_run_interval)
 
@@ -128,3 +147,7 @@ if __name__ == "__main__":
                 msg="Received KeyboardInterrupt or SystemExit in progress; shutting down ..."
             )
             break
+
+
+if __name__ == "__main__":
+    gnpush_main()
