@@ -23,6 +23,8 @@ import logging
 import yaml
 import os.path
 import argparse
+from expiringdict import ExpiringDict
+import hashlib
 
 # Set up the global logger variable
 logging.basicConfig(
@@ -88,6 +90,13 @@ def ttl_check(interval_value):
     return interval_value
 
 
+def nessage_buffer_check(interval_value):
+    interval_value = int(interval_value)
+    if interval_value < 1:
+        raise argparse.ArgumentTypeError("Minimum number for message buffer is 1")
+    return interval_value
+
+
 def age_check(interval_value):
     interval_value = int(interval_value)
     if interval_value < 1:
@@ -129,6 +138,14 @@ def get_command_line_params():
     )
 
     parser.add_argument(
+        "--msg-buffer-size",
+        dest="msg_buffer_size",
+        default=1000,
+        type=nessage_buffer_check,
+        help="Max number of cached URLs; default = 1000, minimal value = 1",
+    )
+
+    parser.add_argument(
         "--generate-test-message",
         dest="generate_test_message",
         action="store_true",
@@ -150,6 +167,7 @@ def get_command_line_params():
     gnpush_run_interval = args.run_interval
     gnpush_generate_test_message = args.generate_test_message
     gnpush_time_to_live = args.time_to_live
+    gnpush_msg_buffer_size = args.msg_buffer_size
 
     return (
         gnpush_topics,
@@ -157,7 +175,19 @@ def get_command_line_params():
         gnpush_run_interval,
         gnpush_generate_test_message,
         gnpush_time_to_live,
+        gnpush_msg_buffer_size,
     )
+
+
+def add_expiring_url(url: str, url_cache: ExpiringDict):
+    key_added: bool = False
+    key = hashlib.md5(url.encode("utf-8")).hexdigest()
+    if key not in url_cache:
+        key_added = True
+        url_cache[key] = url
+        logger.debug(msg=f"Adding URL {url} with key {key}")
+
+    return key_added
 
 
 if __name__ == "__main__":
