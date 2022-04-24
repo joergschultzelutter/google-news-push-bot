@@ -65,7 +65,7 @@ def gnpush_main():
 
     # Set up the ExpiringDict for our entries
     # ttl value is in days but expiringdict needs seconds
-    logger.info(msg=f"Setting up ExpiringDict with ttl of {gnpush_time_to_live} days")
+    logger.info(msg=f"Setting up ExpiringDict with ttl of {gnpush_time_to_live} days and {gnpush_msg_buffer_size} entries")
     gnpush_message_cache = ExpiringDict(
         max_len=gnpush_msg_buffer_size, max_age_seconds=gnpush_time_to_live * 3600
     )
