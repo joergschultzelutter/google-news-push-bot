@@ -67,10 +67,10 @@ Remaining parameters:
 - ```search_term``` - the search term that you want to loop up on Google News
 - ```language``` - [ISO639-a1](https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes) language. For a list of supported codes see [this page](https://github.com/ranahaani/GNews/#supported-languages)
 - ```country``` - [ISO3166-a2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. For a list of supported codes see [this page](https://github.com/ranahaani/GNews/#supported-countries)
-- ```period`` - search period; see [this page](https://github.com/ranahaani/GNews/#results-specification) for further details. This parameter represents the article search span on Google News
-- ```max_results`` - maximum number of search results; see [this page](https://github.com/ranahaani/GNews/#results-specification) for further details.
-- ```exclude_websites```: optional list of 1..n websites that are to be exempted as search result source; see [this page](https://github.com/ranahaani/GNews/#results-specification) for further details.
-- ```proxy```: optional proxy for your search query; see [this page](https://github.com/ranahaani/GNews/#results-specification) for further details.
+- ```period``` - search period; see [this page](https://github.com/ranahaani/GNews/#results-specification) for further details. This parameter represents the article search span on Google News
+- ```max_results``` - maximum number of search results; see [this page](https://github.com/ranahaani/GNews/#results-specification) for further details.
+- ```exclude_websites``` - optional list of 1..n websites that are to be exempted as search result source; see [this page](https://github.com/ranahaani/GNews/#results-specification) for further details.
+- ```proxy``` - optional proxy for your search query; see [this page](https://github.com/ranahaani/GNews/#results-specification) for further details.
 
 
 Now have a look at the [program's command line parameters](COMMANDS.md)
