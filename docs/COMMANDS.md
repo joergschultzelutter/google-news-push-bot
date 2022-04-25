@@ -1,6 +1,6 @@
 # Command line parameters
 
-The following section describes the command line parameters which can be used to influence the program's behavior. In addition to these parameters, settings such as the watch area(s) are configured in the program's config file - see separate section.
+The following section describes the command line parameters which can be used to influence the program's behavior.
 
     usage: gnpush.py [-h] [--topics TOPICS] [--messengers MESSENGERS] [--run-interval RUN_INTERVAL] [--age AGE] [--msg-buffer-size MSG_BUFFER_SIZE]
     				 [--generate-test-message] [--ttl TIME_TO_LIVE]
