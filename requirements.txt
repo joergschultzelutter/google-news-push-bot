@@ -1,0 +1,5 @@
+expiringdict>=1.2.1
+apprise>=0.9.7
+gnews>=0.2.7
+requests>=2.26.0
+pyyaml>=6.0

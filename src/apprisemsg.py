@@ -29,6 +29,22 @@ logger = logging.getLogger(__name__)
 
 
 def send_apprise_message(title: str, body: str, apprise_config_file: str):
+    """
+    Send a nessage via Apprise messenger
+    Parameters
+    ==========
+    title : 'str'
+        Message title
+    body: 'str'
+        Message body
+    apprise_config_file: 'str'
+        Apprise YAML configuration file
+
+    Returns
+    =======
+    result : 'bool'
+        Apprise command execution status
+    """
 
     _apprise_instance = apprise.Apprise()
     _apprise_config = apprise.AppriseConfig()

@@ -17,7 +17,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
-
+import sys
 from pprint import pformat
 import logging
 import yaml
@@ -43,6 +43,14 @@ logger = logging.getLogger(__name__)
 
 
 def gnpush_main():
+    """
+    Main program loop
+    Parameters
+    ==========
+
+    Returns
+    =======
+    """
     logger.info(msg="Startup ...")
 
     # Get command line parms
@@ -59,25 +67,47 @@ def gnpush_main():
     mytopics = get_yaml_file(gnpush_topics)
     logger.debug(msg=f"Received topics: {pformat(mytopics)}")
 
+    # If the user has requested a test message, send it and exit the program
+    if gnpush_generate_test_message:
+        _body = "Test message"
+
+        # Send the final message via Apprise
+        _result = send_apprise_message(
+            title="gnpush Notification",
+            body=_body,
+            apprise_config_file=gnpush_messengers,
+        )
+
+        # log message status
+        _msg = "Successfully sent" if _result else "Failed to send"
+        _msg = _msg + f"a test message via Apprise"
+        logger.info(msg=_msg)
+        sys.exit(0)
+
     # Register the SIGTERM handler; this will allow a safe shutdown of the program
     logger.info(msg="Registering SIGTERM handler for safe shutdown...")
     signal.signal(signal.SIGTERM, signal_term_handler)
 
     # Set up the ExpiringDict for our entries
     # ttl value is in days but expiringdict needs seconds
-    logger.info(msg=f"Setting up ExpiringDict with ttl of {gnpush_time_to_live} days and {gnpush_msg_buffer_size} entries")
+    logger.debug(
+        msg=f"Setting up ExpiringDict with ttl of {gnpush_time_to_live} days and {gnpush_msg_buffer_size} entries"
+    )
     gnpush_message_cache = ExpiringDict(
         max_len=gnpush_msg_buffer_size, max_age_seconds=gnpush_time_to_live * 3600
     )
 
+    # Enter the eternal program loop
     while True:
         try:
-            logger.info(msg=f"Processing your request ...")
+            logger.debug(msg=f"Processing your request ...")
 
             # List which contains our URLs that we need to send to the user (if we found any new topics)
             urls_to_send = []
 
             for topic in mytopics:
+
+                # Extract the future Google News search parameters from our YAML input config
                 # fmt: off
                 search_term = mytopics[topic]["search_term"] if "search_term" in mytopics[topic] else None
                 exclude_websites = mytopics[topic]["exclude_websites"] if "exclude_websites" in mytopics[topic] else None
@@ -91,6 +121,8 @@ def gnpush_main():
                 logger.debug(
                     msg=f"Running Google News search on search term '{search_term}'"
                 )
+
+                # Run the search
                 search_results = get_google_news(
                     search_term=search_term,
                     language=language,
@@ -114,22 +146,25 @@ def gnpush_main():
                             # add it to our target list of URLs
                             if _url not in urls_to_send:
                                 urls_to_send.append(_url)
-                            logger.info(
+                            logger.debug(
                                 msg=f"Successfully added {_url} to expiring cache"
                             )
             # did we find anything that we need to send?
             _count = len(urls_to_send)
+
             if _count > 0:
-                logger.debug(msg=f"Found {_count} new messages in total")
+                # Yup, we found something
+                logger.info(msg=f"Found {_count} new messages in total")
+
                 # Format the message body:
                 # urls with trailing \n except for the last item
-                body = f"I found {_count} new messages for you:\n\n"
-                body = body + ("\n".join(urls_to_send[:]))
+                _body = f"I found {_count} new messages for you:\n\n"
+                _body = _body + ("\n".join(urls_to_send[:]))
 
-                # Send the message via Apprise
+                # Send the final message via Apprise
                 _result = send_apprise_message(
                     title="gnpush Notification",
-                    body=body,
+                    body=_body,
                     apprise_config_file=gnpush_messengers,
                 )
 
@@ -139,9 +174,10 @@ def gnpush_main():
                 logger.info(msg=_msg)
 
             # enter sleep mode
-            logger.info(msg=f"Sleeping for {gnpush_run_interval} hours")
+            logger.debug(msg=f"Sleeping for {gnpush_run_interval} hours")
             time.sleep(3600 * gnpush_run_interval)
 
+        # Exception handler for a safe shutdown
         except (KeyboardInterrupt, SystemExit):
             logger.info(
                 msg="Received KeyboardInterrupt or SystemExit in progress; shutting down ..."

@@ -76,28 +76,72 @@ def signal_term_handler(signal_number, frame):
     sys.exit(0)
 
 
-def run_interval_check(interval_value):
+def run_interval_check(interval_value: int):
+    """
+    Command line parameter check
+    Parameters
+    ==========
+    interval_value : 'int'
+        Interval value that we need to check
+    Returns
+    =======
+    interval_value : 'int'
+        Our input parameter in case we were able to pass the checks
+    """
     interval_value = int(interval_value)
     if interval_value < 1:
         raise argparse.ArgumentTypeError("Minimum run interval is 1 (hours)")
     return interval_value
 
 
-def ttl_check(interval_value):
+def ttl_check(interval_value: int):
+    """
+    Command line parameter check
+    Parameters
+    ==========
+    interval_value : 'int'
+        Interval value that we need to check
+    Returns
+    =======
+    interval_value : 'int'
+        Our input parameter in case we were able to pass the checks
+    """
     interval_value = int(interval_value)
     if interval_value < 1:
         raise argparse.ArgumentTypeError("Minimum ttl is 1 (days)")
     return interval_value
 
 
-def nessage_buffer_check(interval_value):
+def nessage_buffer_check(interval_value: int):
+    """
+    Command line parameter check
+    Parameters
+    ==========
+    interval_value : 'int'
+        Interval value that we need to check
+    Returns
+    =======
+    interval_value : 'int'
+        Our input parameter in case we were able to pass the checks
+    """
     interval_value = int(interval_value)
     if interval_value < 1:
         raise argparse.ArgumentTypeError("Minimum number for message buffer is 1")
     return interval_value
 
 
-def age_check(interval_value):
+def age_check(interval_value: int):
+    """
+    Command line parameter check
+    Parameters
+    ==========
+    interval_value : 'int'
+        Interval value that we need to check
+    Returns
+    =======
+    interval_value : 'int'
+        Our input parameter in case we were able to pass the checks
+    """
     interval_value = int(interval_value)
     if interval_value < 1:
         raise argparse.ArgumentTypeError("Minimum age is 1 (days)")
@@ -105,6 +149,28 @@ def age_check(interval_value):
 
 
 def get_command_line_params():
+    """
+    Parser for the command line parameters
+    Parameters
+    ==========
+
+    Returns
+    =======
+    gnpush_topics : 'str'
+        Name of the YAML file which contains our search parameters
+    gnpush_messengers : 'str'
+        Name of the YAML file which contains our Apprise messenger config
+    gnpush_run_interval: 'int'
+        Sleep time between each program iteration
+    gnpush_generate_test_message: 'bool'
+        If True, send a simple test message and exit the program
+        (used for checking your Apprise config file's validity)
+    gnpush_time_to_live: 'int'
+        Messages that were sent to the user expire after x days
+        and -if still present on Google News- will be resent
+    gnpush_msg_buffer_size: 'int'
+        Size of our expiring message cache
+    """
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
@@ -180,6 +246,19 @@ def get_command_line_params():
 
 
 def add_expiring_url(url: str, url_cache: ExpiringDict):
+    """
+    MD5 an URL and add it to the expirin cache if not yet present
+    Parameters
+    ==========
+    url : 'str'
+        URL that we may need to add to the Expiring Cache
+    url_cache: 'ExpiringDict'
+        Expiring dictionary which contains our URLs
+    Returns
+    =======
+    key_added : 'bool'
+        True if the URL was added as a new entry to the ExpiringDict
+    """
     key_added: bool = False
     key = hashlib.md5(url.encode("utf-8")).hexdigest()
     if key not in url_cache:

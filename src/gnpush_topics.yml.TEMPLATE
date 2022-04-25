@@ -1,5 +1,5 @@
 Suchbegriff_1:
-  search_term: Ukraine-Krise
+  search_term: Weltraumforschung
   language: de
   country: DE
   period: 7d
@@ -7,9 +7,8 @@ Suchbegriff_1:
   exclude_websites:
     - yahoo.com
     - cnn.com
-  proxy: www.blah.de
 Suchbegriff_2:
-  search_term: Direktversicherung
+  search_term: Rente
   language: de
   country: DE
   period: 7d

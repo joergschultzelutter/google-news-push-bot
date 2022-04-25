@@ -131,3 +131,4 @@ dmypy.json
 .idea
 .DS_Store
 gnpush_messengers.yml
+gnpush_topics.yml

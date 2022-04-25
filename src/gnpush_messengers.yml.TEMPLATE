@@ -1,0 +1,7 @@
+version: 1
+
+urls:
+  # List of 1..n Apprise messenger configuration entries
+  # see https://github.com/caronc/apprise/wiki/config_yaml for details
+  - tgram://MY_BOT:MY_USER
+

@@ -19,7 +19,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 from gnews import GNews
-from pprint import pformat
 import logging
 
 # Set up the global logger variable
