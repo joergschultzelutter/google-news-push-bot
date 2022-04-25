@@ -16,7 +16,7 @@
 
 - Add 1..n Apprise messenger configurations to your ```gnpush_messengers.yml``` file (see [Documentation](https://github.com/caronc/apprise/wiki/config_yaml) for further details)
 
-- rename the search term configuration file - this is the file which contains your search terms for the Google News search
+- rename the search term template configuration file - this is the file which contains your search terms for the Google News search
 
 ```bash
     user@phost:~/google-news-push-bot/src $ mv gnpush_topics.yml.TEMPLATE gnpush_topics.yml
