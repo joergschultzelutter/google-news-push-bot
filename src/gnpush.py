@@ -80,7 +80,7 @@ def gnpush_main():
 
         # log message status
         _msg = "Successfully sent" if _result else "Failed to send"
-        _msg = _msg + f"a test message via Apprise"
+        _msg = _msg + f" a test message via Apprise"
         logger.info(msg=_msg)
         sys.exit(0)
 
