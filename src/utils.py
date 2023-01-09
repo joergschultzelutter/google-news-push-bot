@@ -25,6 +25,7 @@ import os.path
 import argparse
 from expiringdict import ExpiringDict
 import hashlib
+import sys
 
 # Set up the global logger variable
 logging.basicConfig(
